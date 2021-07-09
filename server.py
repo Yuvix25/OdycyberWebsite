@@ -91,11 +91,13 @@ class HTTPServer:
         }
 
     def send_headers(self, headers):
+        """Join a header list, decode, and send it to client."""
         headers = " ".join(headers) + "\r\n"
         print(headers)
         self.client_socket.send(headers.encode())
 
     def parse_request(self, request):
+        """Parse request from client to dict of field-value."""
         request = request.split("\r\n")
         parsed = dict()
         parsed["basic_info"] = request[0].split()
@@ -111,6 +113,7 @@ class HTTPServer:
         return parsed
 
     def send_GET_headers(self, data):
+        """Respond to GET."""
         file_name = data["basic_info"][1]
         if os.path.isfile(file_name):
             code = "200"
@@ -140,6 +143,7 @@ class HTTPServer:
 
 
     def GET(self, data):
+        """GET handaling"""
         print(data["basic_info"][1])
 
         if data["basic_info"][1] == "/":
@@ -164,6 +168,7 @@ class HTTPServer:
         return code
 
     def HEAD(self, data):
+        """HEAD handaling"""
         print(data["basic_info"][1])
 
         if data["basic_info"][1] == "/":
@@ -177,7 +182,7 @@ class HTTPServer:
 
 
     def DELETE(self, data):
-
+        """DELETE handaling"""
         file = "." + data["basic_info"][1]
         
         auth = ""
@@ -209,6 +214,7 @@ class HTTPServer:
 
 
     def OPTIONS(self, data):
+        """OPTIONS handaling"""
         code = "204"
         time = datetime.datetime.now(datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
         headers = ["HTTP/1.1", code, self.status_codes[code] + "\r\n", "Allow: OPTIONS, GET, HEAD, DELETE\r\n", "Date:", time + "\r\n", f"Server: Python/{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}\r\n"]
@@ -218,6 +224,7 @@ class HTTPServer:
         return code
 
     def recv(self):
+        """Read request until it's end."""
         data = ""
         new_data = "0" * 1024
 
@@ -229,6 +236,7 @@ class HTTPServer:
         return data
 
     def start(self):
+        """Start the server."""
         print("Server running.")
         while True:
             try:
