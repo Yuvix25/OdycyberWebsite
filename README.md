@@ -1,2 +1,2 @@
 # OdycyberWebsite
-Official website of Odyssey Cyber Course.
+Website of Odyssey Cyber Course.
